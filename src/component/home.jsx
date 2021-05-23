@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import img from "../img/bg.svg";
 import { AiFillGithub } from "react-icons/ai";
 import Data from "./data";
@@ -14,21 +14,18 @@ function Home() {
     const fetchRepo = await fetch(`${URL}/repos`);
     const data = await fetchData.json();
     const data2 = await fetchRepo.json();
-    //   if(data.)
+
     setUser(data);
     setRepo(data2);
     console.log(data.code);
   };
-  //   useEffect(() => {
-  //     getUserData();
-  //   }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     getUserData();
   };
-  //   if (error) {
-  //     return;
-  //   }
+  let myRef = useRef();
+  window.scrollTo({ behavior: "smooth", top: myRef.current.offsetTop });
   return (
     <div>
       <div
@@ -77,7 +74,8 @@ function Home() {
           </form>
         </div>
       </div>
-      {user ? <Data user={user} repo={repo} /> : ""}
+
+      <div ref={myRef}>{user ? <Data user={user} repo={repo} /> : ""}</div>
     </div>
   );
 }
