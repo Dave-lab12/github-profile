@@ -3,7 +3,6 @@ import img from "../img/bg.svg";
 import { AiFillGithub } from "react-icons/ai";
 import Data from "./data";
 function Home() {
-  const URL2 = "";
   const [user, setUser] = useState(null);
   const [repo, setRepo] = useState([]);
   const [userName, setUserName] = useState("");
@@ -25,7 +24,9 @@ function Home() {
     getUserData();
   };
   let myRef = useRef();
-  window.scrollTo({ behavior: "smooth", top: myRef.current.offsetTop });
+  if (user) {
+    window.scrollTo({ behavior: "smooth", top: myRef.current.offsetTop });
+  }
   return (
     <div>
       <div
