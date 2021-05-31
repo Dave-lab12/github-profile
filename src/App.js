@@ -2,7 +2,7 @@ import Home from "./component/home";
 
 function App() {
   return (
-    <div>
+    <div data-test="home">
       <Home />
     </div>
   );

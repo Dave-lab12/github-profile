@@ -1,7 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, Suspense, lazy } from "react";
 import img from "../img/bg.svg";
 import { AiFillGithub } from "react-icons/ai";
-import Data from "./data";
+
+const Data = lazy(() => import("./data"));
+
 function Home() {
   const [user, setUser] = useState(null);
   const [repo, setRepo] = useState([]);
@@ -16,7 +18,6 @@ function Home() {
 
     setUser(data);
     setRepo(data2);
-    console.log(data.code);
   };
 
   const handleSubmit = (e) => {
@@ -24,34 +25,32 @@ function Home() {
     getUserData();
   };
   let myRef = useRef();
-  if (user) {
-    window.scrollTo({ behavior: "smooth", top: myRef.current.offsetTop });
-  }
+
   return (
     <div>
       <div
         style={{ backgroundImage: `url(${img})` }}
-        className=" h-screen w-full"
+        className="h-screen w-screen "
       >
         <div className="flex justify-items-center items-center flex-col space-y-16 pt-7">
-          <h1 className="text-5xl text-yellow-100">Welcome</h1>
+          <h1 className="sm:text-xl md:text-5xl text-yellow-100">Welcome</h1>
 
           <AiFillGithub className="text-8xl" />
 
-          <p className=" text-2xl text-yellow-100">
+          <p className="sm:text-xl md:text-2xl text-yellow-100">
             Enter your Github Username
           </p>
           <form onSubmit={handleSubmit}>
             <div className="flex items-center space-x-8 ">
-              <div className="flex flex-row-reverse">
+              <div className="flex flex-row-reverse ">
                 <input
                   type="text"
-                  className="bg-transparent border-b-2 border-yellow-100 outline-none text-xl text-yellow-100"
+                  className="bg-transparent border-b-2 border-yellow-100 outline-none text-xl text-yellow-100 w-full md:w-auto"
                   onChange={(e) => setUserName(e.target.value)}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6  text-yellow-100 "
+                  className="h-6 w-6  text-yellow-100 hidden md:inline-block"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -66,7 +65,7 @@ function Home() {
               </div>
               <button
                 type="submit"
-                className="p-3 outline-white rounded-sm text-yellow-100"
+                className="p-1 outline-white rounded-sm text-yellow-100 hover:bg-yellow-100 hover:text-black transition-all ease-in-out md:p-3"
                 onClick={handleSubmit}
               >
                 Search{" "}
@@ -76,7 +75,15 @@ function Home() {
         </div>
       </div>
 
-      <div ref={myRef}>{user ? <Data user={user} repo={repo} /> : ""}</div>
+      <div ref={myRef}>
+        {user ? (
+          <Suspense fallback={<div>Fetching Data ...</div>}>
+            <Data user={user} repo={repo} />
+          </Suspense>
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 }
